@@ -3,7 +3,8 @@ LD=ld
 CFLAGS=-std=c99 -ffreestanding -O2 -Wall -Wextra -Iinclude
 LDFLAGS=-T linker.ld -nostdlib
 
-OBJS=boot.o kernel.o terminal.o text_editor.o web_browser.o gui.o
+SRCS=$(wildcard src/*.c)
+OBJS=boot.o $(SRCS:src/%.c=%.o)
 
 all: kernel.bin
 

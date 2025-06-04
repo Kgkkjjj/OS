@@ -1,6 +1,6 @@
 # Open B OS Skeleton
 
-This repository contains a minimal skeleton for an experimental operating system written mostly in C with a small assembly boot file. The goal is to provide a starting point for future development of a terminal, text editor, web browser and GUI environment.
+This repository contains a minimal skeleton for an experimental operating system written mostly in C with a small assembly boot file. It now features stub modules for thirty additional systems such as memory management, scheduling, filesystems and networking. These placeholders accompany the terminal, text editor, web browser and GUI components and are meant for further expansion.
 
 ## Building
 
@@ -22,6 +22,8 @@ make run
 - `src/text_editor.c` – Stub for future text editor functionality.
 - `src/web_browser.c` – Stub for future web browser functionality.
 - `src/gui.c` – Stub for GUI initialization.
+- Additional stub modules under `src/` provide placeholders for systems such as
+  memory management, scheduling, drivers, networking, logging and more.
 - `linker.ld` – Linker script placing sections at the 1 MB mark for a flat kernel.
 
 This code is not a full operating system but a simple foundation for experimentation.
