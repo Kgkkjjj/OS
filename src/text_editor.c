@@ -2,6 +2,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "terminal.h"
+
 void text_editor_init(void) {
-    (void)0; /* Stub */
+    terminal_print("Text Editor Ready\n");
 }
