@@ -2,6 +2,8 @@
 
 This repository contains a minimal Windows 11 WPF code editor written in C#. It implements a collection of tools that make it easier to create and manage small C# programs. The editor can compile files to executables, run basic git and package commands and now provides a project explorer and output window for working with multiple files.
 
+This code mirrors the repo at [https://github.com/Kgkkjjj/OS/tree/codex/rebuild-code-editor-in-c%23-wpf-for-windows-11].
+
 ## Building
 
 This project targets .NET 6.0 and requires the Windows desktop SDK. To build on Windows:
