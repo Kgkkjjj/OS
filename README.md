@@ -1,6 +1,6 @@
 # CodeEditor
 
-This repository contains a simple Windows 11 WPF code editor written in C#. It provides 15 basic tools to help users create C# programs. The project is a skeleton and uses message boxes as placeholders for actual functionality.
+This repository contains a minimal Windows 11 WPF code editor written in C#. It implements 15 tools that make it easier to create and manage small C# programs. The editor can compile the current file to an executable and run simple git and package commands.
 
 ## Building
 
@@ -30,4 +30,4 @@ The editor includes the following tools:
 14. Manage NuGet
 15. Settings
 
-Each tool currently displays a message box when selected.
+All tools are implemented with basic functionality such as opening files, compiling code to an executable using the C# compiler, launching the resulting program, formatting the text editor contents and performing simple git and NuGet commands.
