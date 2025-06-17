@@ -1,9 +1,10 @@
+using System;
 using System.Windows;
 using Microsoft.Win32;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using Forms = System.Windows.Forms;
 using System.CodeDom.Compiler;
 using Microsoft.CSharp;
 using System.Text;
@@ -250,8 +251,8 @@ namespace CodeEditor
 
         private void OpenProject_Click(object sender, RoutedEventArgs e)
         {
-            var fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var fbd = new Forms.FolderBrowserDialog();
+            if (fbd.ShowDialog() == Forms.DialogResult.OK)
             {
                 projectDirectory = fbd.SelectedPath;
                 ProjectFiles.ItemsSource = Directory.GetFiles(projectDirectory, "*.cs");
@@ -281,8 +282,8 @@ namespace CodeEditor
                 System.Windows.MessageBox.Show("Build project first.");
                 return;
             }
-            var fbd = new FolderBrowserDialog();
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var fbd = new Forms.FolderBrowserDialog();
+            if (fbd.ShowDialog() == Forms.DialogResult.OK)
             {
                 var dest = Path.Combine(fbd.SelectedPath, Path.GetFileName(exePath));
                 File.Copy(exePath, dest, true);
@@ -331,7 +332,7 @@ namespace CodeEditor
                 }
 
                 var current = typeof(MainWindow).Assembly.GetName().Version!;
-                Version latest = current;
+                System.Version latest = current;
                 string? latestDir = null;
                 foreach (var dir in System.IO.Directory.GetDirectories(updatesDir, "v*"))
                 {
