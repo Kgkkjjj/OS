@@ -34,5 +34,10 @@ The editor includes the following tools:
 18. Snippet Manager
 19. Terminal
 20. Settings
+21. Check Updates
+
+## Updating
+
+Updates are stored in an `Updates` folder with version directories such as `v1.0` or `v1.2.4`. Use **Check Updates** to copy files from the newest version into the application directory and restart the editor.
 
 All tools are implemented with basic functionality such as opening files, compiling code to an executable using the C# compiler, launching the resulting program, formatting text, manipulating git and NuGet and even deploying the output. A project explorer panel lets you switch between files and an output window captures build results.

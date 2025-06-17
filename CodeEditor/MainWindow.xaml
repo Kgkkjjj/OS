@@ -36,6 +36,7 @@
                 <MenuItem Header="Snippet Manager" Click="SnippetManager_Click" />
                 <MenuItem Header="Terminal" Click="Terminal_Click" />
                 <MenuItem Header="Settings" Click="Settings_Click" />
+                <MenuItem Header="Check Updates" Click="CheckUpdates_Click" />
             </MenuItem>
         </Menu>
         <Grid>
