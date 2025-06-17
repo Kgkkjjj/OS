@@ -1,27 +1,59 @@
-# Open B OS Skeleton
+# CodeEditor
 
-This repository contains a tiny educational kernel written mostly in C with a small assembly boot file. It demonstrates a very small terminal, text editor, web browser and GUI. Each component simply prints a short message to the screen when the kernel boots.
+This repository contains a minimal Windows 11 WPF code editor written in C#. It implements a collection of tools that make it easier to create and manage small C# programs. The editor can compile files to executables, run basic git and package commands and now provides a project explorer and output window for working with multiple files.
+
+This code mirrors the repo at [https://github.com/Kgkkjjj/OS/tree/codex/rebuild-code-editor-in-c%23-wpf-for-windows-11].
+The same repository hosts the update packages used by the editor.
 
 ## Building
 
-```
-make
-```
+This project targets .NET 6.0 and requires the Windows desktop SDK. To build on Windows:
 
-This requires `gcc`, `nasm` and `ld`. Running `make` produces a `kernel.bin` that can be booted with QEMU:
-
-```
-make run
+```bash
+msbuild CodeEditor/CodeEditor.csproj
 ```
 
-## Files
+## Tools
 
-- `src/boot.asm` – Multiboot entry point that sets up a stack and jumps to `kernel_main`.
-- `src/kernel.c` – Initializes subsystems and enters the main loop.
-- `src/terminal.c` – Minimal VGA text terminal with a counter updated in the main loop.
-- `src/text_editor.c` – Prints a message indicating the text editor is ready.
-- `src/web_browser.c` – Prints a message indicating the web browser loaded.
-- `src/gui.c` – Prints a message indicating the GUI is initialized.
-- `linker.ld` – Linker script placing sections at the 1 MB mark for a flat kernel.
+The editor includes the following tools:
 
-This code is not a full operating system but a simple foundation for experimentation.
+1. New File
+2. Open File
+3. Open Project
+4. Save File
+5. Save As
+6. Build
+7. Build All
+8. Run
+9. Debug
+10. Format Code
+11. Search
+12. Replace
+13. Git Commit
+14. Git Push
+15. Add Reference
+16. Manage NuGet
+17. Deploy
+18. Snippet Manager
+19. Terminal
+20. Settings
+21. Check Updates
+
+### Settings
+
+The Settings dialog lets you choose the editor font family and size. These
+preferences are stored in a `settings.json` file next to the application and are
+loaded the next time you run the editor.
+
+## Updating
+
+Updates are stored in an `Updates` folder. Put the URL of the repository that
+contains new update packages in `Updates/REPO_URL.txt`. By default this file
+contains the original repository URL so updates are pulled from its `Updates`
+folder. When **Check Updates** is used, the editor clones or pulls that
+repository into `Updates/repo` and then
+copies files from the newest version directory (for example `v1.2.4`) into the
+application folder, prompting you to restart.
+This repository already includes an example update under `Updates/v1.0`.
+
+All tools are implemented with basic functionality such as opening files, compiling code to an executable using the C# compiler, launching the resulting program, formatting text, manipulating git and NuGet and even deploying the output. A project explorer panel lets you switch between files and an output window captures build results.
