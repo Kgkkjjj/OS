@@ -8,6 +8,7 @@ using Forms = System.Windows.Forms;
 using System.CodeDom.Compiler;
 using Microsoft.CSharp;
 using System.Text;
+using System.Windows.Media;
 
 namespace CodeEditor
 {
@@ -17,10 +18,14 @@ namespace CodeEditor
         private string? projectDirectory;
         private readonly List<string> additionalReferences = new();
         private readonly Dictionary<string, string> snippets = new();
+        private readonly EditorSettings settings;
 
         public MainWindow()
         {
             InitializeComponent();
+            settings = EditorSettings.Load();
+            Editor.FontFamily = new FontFamily(settings.FontFamily);
+            Editor.FontSize = settings.FontSize;
         }
 
         private void NewFile_Click(object sender, RoutedEventArgs e)
@@ -316,7 +321,12 @@ namespace CodeEditor
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show("No settings available yet.");
+            var win = new SettingsWindow(settings);
+            if (win.ShowDialog() == true)
+            {
+                Editor.FontFamily = new FontFamily(settings.FontFamily);
+                Editor.FontSize = settings.FontSize;
+            }
         }
 
         private void CheckUpdates_Click(object sender, RoutedEventArgs e)

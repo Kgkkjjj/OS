@@ -36,6 +36,12 @@ The editor includes the following tools:
 20. Settings
 21. Check Updates
 
+### Settings
+
+The Settings dialog lets you choose the editor font family and size. These
+preferences are stored in a `settings.json` file next to the application and are
+loaded the next time you run the editor.
+
 ## Updating
 
 Updates are stored in an `Updates` folder with version directories such as `v1.0` or `v1.2.4`. Use **Check Updates** to copy files from the newest version into the application directory and restart the editor.
