@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using System.CodeDom.Compiler;
 using Microsoft.CSharp;
 using System.Text;
@@ -12,7 +13,9 @@ namespace CodeEditor
     public partial class MainWindow : Window
     {
         private string? currentFilePath;
+        private string? projectDirectory;
         private readonly List<string> additionalReferences = new();
+        private readonly Dictionary<string, string> snippets = new();
 
         public MainWindow()
         {
@@ -81,11 +84,52 @@ namespace CodeEditor
                 var sb = new StringBuilder();
                 foreach (CompilerError err in result.Errors)
                     sb.AppendLine(err.ToString());
-                MessageBox.Show(sb.ToString(), "Build Errors");
+                WriteOutput(sb.ToString());
             }
             else
             {
-                MessageBox.Show($"Build succeeded: {exePath}");
+                WriteOutput($"Build succeeded: {exePath}");
+            }
+        }
+
+        private void BuildAll_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(projectDirectory))
+            {
+                System.Windows.MessageBox.Show("Open a project first.");
+                return;
+            }
+
+            var files = Directory.GetFiles(projectDirectory, "*.cs");
+            if (files.Length == 0)
+            {
+                WriteOutput("No C# files found in project.");
+                return;
+            }
+
+            string exePath = Path.Combine(projectDirectory, "Project.exe");
+            var provider = new CSharpCodeProvider();
+            var parameters = new CompilerParameters
+            {
+                GenerateExecutable = true,
+                OutputAssembly = exePath
+            };
+            parameters.ReferencedAssemblies.Add("System.dll");
+            parameters.ReferencedAssemblies.Add("System.Windows.Forms.dll");
+            foreach (var r in additionalReferences)
+                parameters.ReferencedAssemblies.Add(r);
+
+            CompilerResults result = provider.CompileAssemblyFromFile(parameters, files);
+            if (result.Errors.HasErrors)
+            {
+                var sb = new StringBuilder();
+                foreach (CompilerError err in result.Errors)
+                    sb.AppendLine(err.ToString());
+                WriteOutput(sb.ToString());
+            }
+            else
+            {
+                WriteOutput($"Build succeeded: {exePath}");
             }
         }
 
@@ -93,7 +137,7 @@ namespace CodeEditor
         {
             if (string.IsNullOrEmpty(currentFilePath))
             {
-                MessageBox.Show("Save and build the file first.");
+                System.Windows.MessageBox.Show("Save and build the file first.");
                 return;
             }
 
@@ -101,10 +145,11 @@ namespace CodeEditor
             if (File.Exists(exePath))
             {
                 Process.Start(new ProcessStartInfo(exePath) { UseShellExecute = true });
+                WriteOutput($"Running {exePath}");
             }
             else
             {
-                MessageBox.Show("Executable not found. Build first.");
+                System.Windows.MessageBox.Show("Executable not found. Build first.");
             }
         }
 
@@ -112,7 +157,7 @@ namespace CodeEditor
         {
             if (string.IsNullOrEmpty(currentFilePath))
             {
-                MessageBox.Show("Save and build the file first.");
+                System.Windows.MessageBox.Show("Save and build the file first.");
                 return;
             }
 
@@ -123,7 +168,7 @@ namespace CodeEditor
             }
             else
             {
-                MessageBox.Show("Executable not found. Build first.");
+                System.Windows.MessageBox.Show("Executable not found. Build first.");
             }
         }
 
@@ -156,7 +201,7 @@ namespace CodeEditor
                 }
                 else
                 {
-                    MessageBox.Show("Text not found.");
+                    System.Windows.MessageBox.Show("Text not found.");
                 }
             }
         }
@@ -174,14 +219,14 @@ namespace CodeEditor
             var msg = Microsoft.VisualBasic.Interaction.InputBox("Commit message:", "Git Commit");
             if (!string.IsNullOrEmpty(msg))
             {
-                RunProcess("git", $"add {currentFilePath ?? "."}");
-                RunProcess("git", $"commit -m \"{msg.Replace("\"", "\\\"")}\"");
+                WriteOutput(RunProcess("git", $"add {currentFilePath ?? "."}").Trim());
+                WriteOutput(RunProcess("git", $"commit -m \"{msg.Replace("\"", "\\\"")}\"").Trim());
             }
         }
 
         private void GitPush_Click(object sender, RoutedEventArgs e)
         {
-            RunProcess("git", "push");
+            WriteOutput(RunProcess("git", "push").Trim());
         }
 
         private void AddReference_Click(object sender, RoutedEventArgs e)
@@ -190,6 +235,7 @@ namespace CodeEditor
             if (ofd.ShowDialog() == true)
             {
                 additionalReferences.Add(ofd.FileName);
+                WriteOutput($"Reference added: {ofd.FileName}");
             }
         }
 
@@ -198,16 +244,81 @@ namespace CodeEditor
             var pkg = Microsoft.VisualBasic.Interaction.InputBox("NuGet package:", "Manage NuGet");
             if (!string.IsNullOrEmpty(pkg))
             {
-                RunProcess("dotnet", $"add package {pkg}");
+                WriteOutput(RunProcess("dotnet", $"add package {pkg}").Trim());
             }
+        }
+
+        private void OpenProject_Click(object sender, RoutedEventArgs e)
+        {
+            var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                projectDirectory = fbd.SelectedPath;
+                ProjectFiles.ItemsSource = Directory.GetFiles(projectDirectory, "*.cs");
+                WriteOutput($"Project opened: {projectDirectory}");
+            }
+        }
+
+        private void ProjectFiles_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ProjectFiles.SelectedItem is string path && File.Exists(path))
+            {
+                currentFilePath = path;
+                Editor.Text = File.ReadAllText(path);
+            }
+        }
+
+        private void Deploy_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(projectDirectory))
+            {
+                System.Windows.MessageBox.Show("Open a project first.");
+                return;
+            }
+            var exePath = Path.Combine(projectDirectory, "Project.exe");
+            if (!File.Exists(exePath))
+            {
+                System.Windows.MessageBox.Show("Build project first.");
+                return;
+            }
+            var fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var dest = Path.Combine(fbd.SelectedPath, Path.GetFileName(exePath));
+                File.Copy(exePath, dest, true);
+                WriteOutput($"Deployed to {dest}");
+            }
+        }
+
+        private void SnippetManager_Click(object sender, RoutedEventArgs e)
+        {
+            var name = Microsoft.VisualBasic.Interaction.InputBox("Snippet name:", "Snippets");
+            if (string.IsNullOrEmpty(name))
+                return;
+
+            if (snippets.TryGetValue(name, out var code))
+            {
+                Editor.SelectedText = code;
+            }
+            else
+            {
+                var newCode = Microsoft.VisualBasic.Interaction.InputBox("Snippet code:", "Snippets");
+                if (!string.IsNullOrEmpty(newCode))
+                    snippets[name] = newCode;
+            }
+        }
+
+        private void Terminal_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("cmd.exe") { UseShellExecute = true, WorkingDirectory = projectDirectory ?? System.Environment.CurrentDirectory });
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("No settings available yet.");
+            System.Windows.MessageBox.Show("No settings available yet.");
         }
 
-        private static void RunProcess(string fileName, string args)
+        private static string RunProcess(string fileName, string args)
         {
             try
             {
@@ -218,16 +329,21 @@ namespace CodeEditor
                     UseShellExecute = false
                 };
                 var p = Process.Start(psi);
+                var output = p.StandardOutput.ReadToEnd();
+                var error = p.StandardError.ReadToEnd();
                 p.WaitForExit();
-                if (p.ExitCode != 0)
-                    MessageBox.Show(p.StandardError.ReadToEnd(), fileName);
-                else
-                    MessageBox.Show(p.StandardOutput.ReadToEnd(), fileName);
+                return string.IsNullOrEmpty(error) ? output : error;
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show(ex.Message, fileName);
+                return ex.Message;
             }
+        }
+
+        private void WriteOutput(string text)
+        {
+            Output.AppendText(text + System.Environment.NewLine);
+            Output.ScrollToEnd();
         }
     }
 }

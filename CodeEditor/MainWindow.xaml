@@ -7,13 +7,17 @@
             <MenuItem Header="File">
                 <MenuItem Header="New File" Click="NewFile_Click" />
                 <MenuItem Header="Open File" Click="OpenFile_Click" />
+                <MenuItem Header="Open Project" Click="OpenProject_Click" />
+                <Separator/>
                 <MenuItem Header="Save File" Click="SaveFile_Click" />
                 <MenuItem Header="Save As" Click="SaveAs_Click" />
             </MenuItem>
             <MenuItem Header="Build">
                 <MenuItem Header="Build" Click="Build_Click" />
+                <MenuItem Header="Build All" Click="BuildAll_Click" />
                 <MenuItem Header="Run" Click="Run_Click" />
                 <MenuItem Header="Debug" Click="Debug_Click" />
+                <MenuItem Header="Deploy" Click="Deploy_Click" />
             </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Header="Format Code" Click="FormatCode_Click" />
@@ -29,11 +33,24 @@
                 <MenuItem Header="Manage NuGet" Click="ManageNuGet_Click" />
             </MenuItem>
             <MenuItem Header="Tools">
+                <MenuItem Header="Snippet Manager" Click="SnippetManager_Click" />
+                <MenuItem Header="Terminal" Click="Terminal_Click" />
                 <MenuItem Header="Settings" Click="Settings_Click" />
             </MenuItem>
         </Menu>
         <Grid>
-            <TextBox Name="Editor" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" FontFamily="Consolas"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="100" />
+            </Grid.RowDefinitions>
+
+            <ListBox x:Name="ProjectFiles" Grid.Row="0" Grid.Column="0" SelectionChanged="ProjectFiles_SelectionChanged" />
+            <TextBox Name="Editor" Grid.Row="0" Grid.Column="1" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" FontFamily="Consolas"/>
+            <TextBox Name="Output" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="Consolas" TextWrapping="Wrap" IsReadOnly="True"/>
         </Grid>
     </DockPanel>
 </Window>
