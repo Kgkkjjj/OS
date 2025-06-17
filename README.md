@@ -3,6 +3,7 @@
 This repository contains a minimal Windows 11 WPF code editor written in C#. It implements a collection of tools that make it easier to create and manage small C# programs. The editor can compile files to executables, run basic git and package commands and now provides a project explorer and output window for working with multiple files.
 
 This code mirrors the repo at [https://github.com/Kgkkjjj/OS/tree/codex/rebuild-code-editor-in-c%23-wpf-for-windows-11].
+The same repository hosts the update packages used by the editor.
 
 ## Building
 
@@ -47,8 +48,10 @@ loaded the next time you run the editor.
 ## Updating
 
 Updates are stored in an `Updates` folder. Put the URL of the repository that
-contains new update packages in `Updates/REPO_URL.txt`. When **Check Updates**
-is used, the editor clones or pulls that repository into `Updates/repo` and then
+contains new update packages in `Updates/REPO_URL.txt`. By default this file
+contains the original repository URL so updates are pulled from its `Updates`
+folder. When **Check Updates** is used, the editor clones or pulls that
+repository into `Updates/repo` and then
 copies files from the newest version directory (for example `v1.2.4`) into the
 application folder, prompting you to restart.
 This repository already includes an example update under `Updates/v1.0`.
