@@ -341,6 +341,26 @@ namespace CodeEditor
                     return;
                 }
 
+                // Pull updates from remote repository if a repo URL is provided
+                string urlFile = System.IO.Path.Combine(updatesDir, "REPO_URL.txt");
+                string remoteDir = System.IO.Path.Combine(updatesDir, "repo");
+                if (System.IO.File.Exists(urlFile))
+                {
+                    string repoUrl = System.IO.File.ReadAllText(urlFile).Trim();
+                    if (System.IO.Directory.Exists(remoteDir))
+                    {
+                        RunProcess("git", "pull", remoteDir);
+                    }
+                    else
+                    {
+                        RunProcess("git", $"clone \"{repoUrl}\" \"{remoteDir}\"");
+                    }
+                    if (System.IO.Directory.Exists(remoteDir))
+                    {
+                        updatesDir = remoteDir;
+                    }
+                }
+
                 var current = typeof(MainWindow).Assembly.GetName().Version!;
                 System.Version latest = current;
                 string? latestDir = null;
@@ -378,7 +398,7 @@ namespace CodeEditor
             }
         }
 
-        private static string RunProcess(string fileName, string args)
+        private static string RunProcess(string fileName, string args, string? workingDir = null)
         {
             try
             {
@@ -388,6 +408,8 @@ namespace CodeEditor
                     RedirectStandardError = true,
                     UseShellExecute = false
                 };
+                if (!string.IsNullOrEmpty(workingDir))
+                    psi.WorkingDirectory = workingDir;
                 var p = Process.Start(psi);
                 var output = p.StandardOutput.ReadToEnd();
                 var error = p.StandardError.ReadToEnd();

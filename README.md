@@ -44,7 +44,11 @@ loaded the next time you run the editor.
 
 ## Updating
 
-Updates are stored in an `Updates` folder with version directories such as `v1.0` or `v1.2.4`. Use **Check Updates** to copy files from the newest version into the application directory and restart the editor.
+Updates are stored in an `Updates` folder. Put the URL of the repository that
+contains new update packages in `Updates/REPO_URL.txt`. When **Check Updates**
+is used, the editor clones or pulls that repository into `Updates/repo` and then
+copies files from the newest version directory (for example `v1.2.4`) into the
+application folder, prompting you to restart.
 This repository already includes an example update under `Updates/v1.0`.
 
 All tools are implemented with basic functionality such as opening files, compiling code to an executable using the C# compiler, launching the resulting program, formatting text, manipulating git and NuGet and even deploying the output. A project explorer panel lets you switch between files and an output window captures build results.
