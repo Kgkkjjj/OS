@@ -1,2 +1,7 @@
-*.o
-kernel.bin
+# Ignore build outputs
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log

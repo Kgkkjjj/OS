@@ -1,27 +1,33 @@
-# Open B OS Skeleton
+# CodeEditor
 
-This repository contains a tiny educational kernel written mostly in C with a small assembly boot file. It demonstrates a very small terminal, text editor, web browser and GUI. Each component simply prints a short message to the screen when the kernel boots.
+This repository contains a simple Windows 11 WPF code editor written in C#. It provides 15 basic tools to help users create C# programs. The project is a skeleton and uses message boxes as placeholders for actual functionality.
 
 ## Building
 
-```
-make
-```
+This project targets .NET 6.0 and requires the Windows desktop SDK. To build on Windows:
 
-This requires `gcc`, `nasm` and `ld`. Running `make` produces a `kernel.bin` that can be booted with QEMU:
-
-```
-make run
+```bash
+msbuild CodeEditor/CodeEditor.csproj
 ```
 
-## Files
+## Tools
 
-- `src/boot.asm` – Multiboot entry point that sets up a stack and jumps to `kernel_main`.
-- `src/kernel.c` – Initializes subsystems and enters the main loop.
-- `src/terminal.c` – Minimal VGA text terminal with a counter updated in the main loop.
-- `src/text_editor.c` – Prints a message indicating the text editor is ready.
-- `src/web_browser.c` – Prints a message indicating the web browser loaded.
-- `src/gui.c` – Prints a message indicating the GUI is initialized.
-- `linker.ld` – Linker script placing sections at the 1 MB mark for a flat kernel.
+The editor includes the following tools:
 
-This code is not a full operating system but a simple foundation for experimentation.
+1. New File
+2. Open File
+3. Save File
+4. Save As
+5. Build
+6. Run
+7. Debug
+8. Format Code
+9. Search
+10. Replace
+11. Git Commit
+12. Git Push
+13. Add Reference
+14. Manage NuGet
+15. Settings
+
+Each tool currently displays a message box when selected.
