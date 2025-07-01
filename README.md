@@ -12,15 +12,7 @@ make
 
 This produces `bin/os-image.bin`, a bootable image.
 
-The image includes a second stage written in C (`src/stage2.c`) that is loaded when you run the `update` command inside the OS. This stage prints an update message and reboots the machine.
-
-To fetch updates from the `codex/build-an-os-in-assembly-with-cli-and-filesystem` repository, run:
-
-```bash
-scripts/pull_updates.sh
-```
-
-This clones (or updates) the repository into `external/update_repo` so you can integrate additional files into the image.
+The image includes a second stage written in C (`src/stage2.c`) that is built into the disk image. When you type `update` at the prompt, the bootloader loads this stage, displays an update message and then reboots the machine.
 
 ## Running with QEMU
 

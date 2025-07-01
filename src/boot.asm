@@ -108,7 +108,7 @@ load_update:
 welcome_msg db "Welcome to Assembly OS!", 13, 10, 0
 help_msg db "Available commands: help, halt, update", 13, 10, 0
 unknown_msg db "Unknown command", 13, 10, 0
-update_msg db "Loading update...",13,10,0
+update_msg db "Updating your system...",13,10,0
 update_fail_msg db "Update failed",13,10,0
 help_cmd db "help",0
 halt_cmd db "halt",0

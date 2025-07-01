@@ -26,10 +26,5 @@ bin/stage2.bin: src/stage2.c
 run: bin/os-image.bin
 	qemu-system-x86_64 -drive format=raw,file=$< -nographic
 
-update_repo:
-	scripts/pull_updates.sh
-
-update: update_repo all
-
 clean:
 	rm -f bin/os-image.bin bin/boot.bin bin/stage2.bin bin/stage2.o bin/stage2.elf
