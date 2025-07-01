@@ -1,22 +1,24 @@
 # Assembly OS
 
-Assembly OS is a minimal operating system. The bootloader is written in 16‑bit x86 assembly and provides a simple command-line interface. An optional C kernel can be loaded from disk using the `update` command.
+Assembly OS is a tiny operating system. A 16‑bit bootloader loads a C kernel which provides a simple command-line interface.
 
 ## Building
 
-Ensure `nasm`, `gcc` and optionally `qemu-system-x86_64` are installed. Run:
+Install `nasm`, `gcc` and optionally `qemu-system-x86_64` then run:
 
 ```bash
 make
 ```
 
-This produces `bin/os-image.bin`, a bootable image.
+This creates `bin/os-image.bin`, a bootable disk image containing the bootloader and kernel.
 
-The image includes a second stage written in C (`src/stage2.c`) that is built into the disk image. When you type `update` at the prompt, the bootloader loads this stage, displays an update message and then reboots the machine.
+To fetch the upstream example repository used for updates run:
+
+```bash
+make update_repo
+```
 
 ## Running with QEMU
-
-With QEMU installed, boot the image using:
 
 ```bash
 make run
@@ -24,6 +26,6 @@ make run
 
 ## Usage
 
-At the prompt you can type `help` to list available commands. `halt` stops the emulator and `update` loads a secondary stage from disk if present. Any unrecognised command prints an error message.
+At the prompt type `help` to list commands. `halt` stops the emulator. `update` prints an update message and reboots the machine. The update script pulls the repository `codex/build-an-os-in-assembly-with-cli-and-filesystem` into the `updates/` directory.
 
-This project is a starting point for experimenting with low‑level OS development in pure assembly.
+This project is a minimal starting point for experimenting with low‑level OS development in C.
