@@ -13,8 +13,14 @@ static void print(const char *s)
     }
 }
 
+static void reboot(void)
+{
+    __asm__ volatile ("int $0x19");
+}
+
 void main(void)
 {
-    print("C kernel update loaded!\r\n");
+    print("Updating your system...\r\n");
+    reboot();
     for (;;);
 }
