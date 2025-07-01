@@ -1,10 +1,10 @@
 # Assembly OS
 
-Assembly OS is a minimal operating system written entirely in 16‑bit x86 assembly. It provides a simple command-line interface with a couple of built‑in commands.
+Assembly OS is a minimal operating system. The bootloader is written in 16‑bit x86 assembly and provides a simple command-line interface. An optional C kernel can be loaded from disk using the `update` command.
 
 ## Building
 
-Ensure `nasm` and optionally `qemu-system-x86_64` are installed. Run:
+Ensure `nasm`, `gcc` and optionally `qemu-system-x86_64` are installed. Run:
 
 ```bash
 make
@@ -12,7 +12,7 @@ make
 
 This produces `bin/os-image.bin`, a bootable image.
 
-The image includes a second stage (`src/stage2.asm`) that is loaded when you run the `update` command inside the OS.
+The image includes a second stage written in C (`src/stage2.c`) that is loaded when you run the `update` command inside the OS. This small C kernel simply prints a message when executed.
 
 ## Running with QEMU
 
